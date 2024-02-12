@@ -1,0 +1,7 @@
+CREATE TABLE public.books (
+	   id INT NOT NULL AUTO_INCREMENT,
+	   name CHARACTER VARYING(100) NOT NULL,
+	   author CHARACTER VARYING(100) NOT NULL,
+	   rented BOOLEAN NOT NULL DEFAULT false,
+	   PRIMARY KEY (id)
+	   );
