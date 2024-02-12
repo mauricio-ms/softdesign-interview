@@ -1,6 +1,5 @@
 package br.com.softdesign.interview.domain.books;
 
-import br.com.softdesign.interview.http.BookDto;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,7 +11,7 @@ public class BookService {
         this.repository = repository;
     }
 
-    public void add(BookDto bookDto) {
-        repository.add(bookDto);
+    public Book add(Book book) {
+        return repository.add(book);
     }
 }

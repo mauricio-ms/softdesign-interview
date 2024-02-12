@@ -1,6 +1,8 @@
 package br.com.softdesign.interview.http;
 
-public record BookDto(
+record BookDto(
+        Long id,
         String name,
-        String author) {
+        String author,
+        boolean rented) {
 }

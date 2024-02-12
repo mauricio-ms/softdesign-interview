@@ -1,12 +1,15 @@
 package br.com.softdesign.interview.domain.books;
 
-import br.com.softdesign.interview.http.BookDto;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
+import java.sql.PreparedStatement;
 
 @Repository
 class BookRepository {
-    private static final String ADD_SQL = "INSERT INTO books (name, author, rented) VALUES (?, ?, false)";
+    private static final String ADD_SQL = "INSERT INTO books (name, author, rented) VALUES (?, ?, ?)";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -14,12 +17,26 @@ class BookRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void add(BookDto bookDto) {
-        jdbcTemplate.update(ADD_SQL, ps -> {
-            ps.setString(1, bookDto.name());
-            ps.setString(2, bookDto.author());
-        });
+    public Book add(Book book) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int update = jdbcTemplate.update(psc -> {
+            PreparedStatement ps = psc.prepareStatement(ADD_SQL, new String[]{"id"});
+            ps.setString(1, book.name());
+            ps.setString(2, book.author());
+            ps.setBoolean(3, book.rented());
 
-        // TODO validate not inserted
+            return ps;
+        }, keyHolder);
+
+        if (update == 0) {
+            throw new RuntimeException("Book not added: " + book);
+        }
+
+        return new Book(
+                keyHolder.getKeyAs(Long.class),
+                book.name(),
+                book.author(),
+                book.rented()
+        );
     }
 }
