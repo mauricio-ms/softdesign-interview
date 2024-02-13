@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Book } from '../model/book';
+import { Query } from '../model/query';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -14,8 +15,8 @@ export class BookService {
     this.booksApiUri = 'http://localhost:8080/soft-design/books';
   }
 
-  public search(query: string): Observable<Book[]> {
-    return this.http.get<Book[]>(`${this.booksApiUri}/search?q=${query}`);
+  public search(query: Query): Observable<Book[]> {
+    return this.http.get<Book[]>(`${this.booksApiUri}/search?q=${query.value}`);
   }
 
   public save(book: Book) {

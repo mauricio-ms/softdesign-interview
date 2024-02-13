@@ -1,5 +1,19 @@
 <div class="card my-5">
     <div class="card-body">
+        <form (ngSubmit)="search()" #listForm="ngForm">
+            <div class="form-group">
+                <label for="query">Search</label>
+                <div class="row">
+                    <div class="col">
+                        <input type="text" [(ngModel)]="query.value" class="form-control" id="query" name="query"
+                            placeholder="Search books" required #value="ngModel">
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-info">Search</button>
+                    </div>
+                </div>
+            </div>
+        </form>
         <table class="table table-bordered table-striped">
             <thead class="thead-dark">
                 <tr>

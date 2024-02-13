@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Book } from '../model/book';
+import { Query } from '../model/query';
 import { BookService } from '../service/book.service';
 
 @Component({
@@ -9,12 +10,20 @@ import { BookService } from '../service/book.service';
 })
 export class BookListComponent implements OnInit {
 
-  books: Book[] = [];
+  query: Query;
+  books: Book[];
 
-  constructor(private bookService: BookService) {}
+  constructor(private bookService: BookService) {
+    this.query = new Query();
+    this.books = [];
+  }
 
   ngOnInit() {
-    this.bookService.search("").subscribe((data: Book[]) => {
+    this.search(); 
+  }
+
+  search() {
+    this.bookService.search(this.query).subscribe((data: Book[]) => {
       this.books = data;
     });
   }
