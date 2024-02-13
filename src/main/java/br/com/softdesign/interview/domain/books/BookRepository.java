@@ -19,6 +19,7 @@ class BookRepository {
     private static final String FIND_BY_ID_SQL = "SELECT * FROM books WHERE id = ?";
     private static final String ADD_SQL = "INSERT INTO books (name, author, rented) VALUES (?, ?, ?)";
     private static final String UPDATE_SQL = "UPDATE books SET name = ?, author = ? WHERE id = ?";
+    private static final String DELETE_SQL = "DELETE books WHERE id = ?";
 
     private static final RowMapper<Book> BOOK_ROW_MAPPER = (rs, rowNum) -> new Book(
             rs.getLong("id"),
@@ -45,7 +46,7 @@ class BookRepository {
 
     public Book add(Book book) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        int update = jdbcTemplate.update(psc -> {
+        int updated = jdbcTemplate.update(psc -> {
             PreparedStatement ps = psc.prepareStatement(ADD_SQL, new String[]{"id"});
             ps.setString(1, book.name());
             ps.setString(2, book.author());
@@ -54,7 +55,7 @@ class BookRepository {
             return ps;
         }, keyHolder);
 
-        if (update == 0) {
+        if (updated == 0) {
             throw new RuntimeException("Book not added: " + book);
         }
 
@@ -74,5 +75,13 @@ class BookRepository {
                     return currentBook;
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Book " + id + " not found."));
+    }
+
+    public void delete(Long id) {
+        // TODO: find and apply business rules
+        int deleted = jdbcTemplate.update(DELETE_SQL, id);
+        if (deleted == 0) {
+            throw new RuntimeException("Book not deleted: " + id);
+        }
     }
 }

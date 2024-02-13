@@ -24,4 +24,8 @@ public class BookService {
     public Book update(Long id, Book book) {
         return repository.update(id, book);
     }
+
+    public void delete(Long id) {
+        repository.delete(id);
+    }
 }

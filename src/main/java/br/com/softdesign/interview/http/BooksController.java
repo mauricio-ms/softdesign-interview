@@ -23,18 +23,28 @@ class BooksController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BookDto> findBookById(@PathVariable Long id) {
         LOGGER.info("GET /{}", id);
-        return bookService.findById(id)
-                .map(book -> ResponseEntity.ok(BookMapper.mapToDto(book)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        try {
+            return bookService.findById(id)
+                    .map(book -> ResponseEntity.ok(BookMapper.mapToDto(book)))
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            LOGGER.error("Error finding book {}:", id, e);
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public BookDto addBook(@RequestBody BookDto bookDto) {
+    public ResponseEntity<BookDto> addBook(@RequestBody BookDto bookDto) {
         LOGGER.info("POST / {}", bookDto);
-        Book newBook = bookService.add(BookMapper.mapToDomain(bookDto));
-        return BookMapper.mapToDto(newBook);
+        try {
+            Book newBook = bookService.add(BookMapper.mapToDomain(bookDto));
+            return ResponseEntity.ok(BookMapper.mapToDto(newBook));
+        } catch (Exception e) {
+            LOGGER.error("Error adding book {}:", bookDto, e);
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping(
@@ -48,6 +58,20 @@ class BooksController {
             return ResponseEntity.ok(BookMapper.mapToDto(newBook));
         } catch (Exception e) {
             LOGGER.error("Error updating book {}:", id, e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping(
+            path = "/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+        LOGGER.info("DELETE /{}", id);
+        try {
+            bookService.delete(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            LOGGER.error("Error deleting book {}:", id, e);
             return ResponseEntity.badRequest().build();
         }
     }
