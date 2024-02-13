@@ -10,6 +10,8 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/books")
 class BooksController {
@@ -31,6 +33,28 @@ class BooksController {
                     .orElseGet(() -> ResponseEntity.notFound().build());
         } catch (Exception e) {
             LOGGER.error("Error finding book {}:", id, e);
+            return ResponseEntity.of(
+                            ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()))
+                    .build();
+        }
+    }
+
+    /**
+     * FIXME: In the real world, this endpoint will need to return paginated results.
+     */
+    @GetMapping(
+            path = "/search",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<BookDto>> search(@RequestParam String q) {
+        LOGGER.info("GET /search?q={}", q);
+        try {
+            return ResponseEntity.ok(
+                    bookService.search(q).stream()
+                            .map(BookMapper::mapToDto)
+                            .toList()
+            );
+        } catch (Exception e) {
+            LOGGER.error("Error querying books by {}:", q, e);
             return ResponseEntity.of(
                             ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()))
                     .build();

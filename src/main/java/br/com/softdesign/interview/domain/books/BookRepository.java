@@ -5,11 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -20,6 +23,7 @@ class BookRepository {
     private static final String ADD_SQL = "INSERT INTO books (name, author, rented) VALUES (?, ?, ?)";
     private static final String UPDATE_SQL = "UPDATE books SET name = ?, author = ?, rented = ? WHERE id = ?";
     private static final String DELETE_SQL = "DELETE books WHERE id = ?";
+    private static final String SEARCH_SQL = "SELECT * FROM books WHERE UPPER(name) LIKE :query OR UPPER(author) LIKE :query";
 
     private static final RowMapper<Book> BOOK_ROW_MAPPER = (rs, rowNum) -> new Book(
             rs.getLong("id"),
@@ -29,9 +33,11 @@ class BookRepository {
     );
 
     private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public BookRepository(JdbcTemplate jdbcTemplate) {
+    public BookRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     public Optional<Book> findById(Long id) {
@@ -83,5 +89,10 @@ class BookRepository {
         if (deleted == 0) {
             throw new RuntimeException("Book not deleted: " + id);
         }
+    }
+
+    public List<Book> search(String query) {
+        // TODO: Validate query parameter, not empty and to avoid sql injection
+        return namedParameterJdbcTemplate.query(SEARCH_SQL, Map.of("query", "%" + query.toUpperCase() + "%"), BOOK_ROW_MAPPER);
     }
 }

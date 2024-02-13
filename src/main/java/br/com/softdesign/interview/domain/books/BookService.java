@@ -2,6 +2,7 @@ package br.com.softdesign.interview.domain.books;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,6 +23,10 @@ public class BookService {
 
     public Optional<Book> findById(Long id) {
         return repository.findById(id);
+    }
+
+    public List<Book> search(String query) {
+        return repository.search(query);
     }
 
     public Book add(Book book) {
