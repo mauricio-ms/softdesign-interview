@@ -4,7 +4,9 @@ import br.com.softdesign.interview.domain.books.Book;
 import br.com.softdesign.interview.domain.books.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +31,9 @@ class BooksController {
                     .orElseGet(() -> ResponseEntity.notFound().build());
         } catch (Exception e) {
             LOGGER.error("Error finding book {}:", id, e);
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.of(
+                            ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()))
+                    .build();
         }
     }
 
@@ -43,7 +47,9 @@ class BooksController {
             return ResponseEntity.ok(BookMapper.mapToDto(newBook));
         } catch (Exception e) {
             LOGGER.error("Error adding book {}:", bookDto, e);
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.of(
+                            ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()))
+                    .build();
         }
     }
 
@@ -58,7 +64,9 @@ class BooksController {
             return ResponseEntity.ok(BookMapper.mapToDto(newBook));
         } catch (Exception e) {
             LOGGER.error("Error updating book {}:", id, e);
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.of(
+                            ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()))
+                    .build();
         }
     }
 
@@ -73,7 +81,9 @@ class BooksController {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             LOGGER.error("Error renting book {}:", id, e);
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.of(
+                            ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()))
+                    .build();
         }
     }
 
@@ -87,7 +97,9 @@ class BooksController {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             LOGGER.error("Error deleting book {}:", id, e);
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.of(
+                            ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()))
+                    .build();
         }
     }
 }

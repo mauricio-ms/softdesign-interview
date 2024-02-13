@@ -76,7 +76,9 @@ class BookRepository {
     }
 
     public void delete(Long id) {
-        // TODO: find and apply business rules
+        Book book = findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Book " + id + " not found."));
+        book.delete();
         int deleted = jdbcTemplate.update(DELETE_SQL, id);
         if (deleted == 0) {
             throw new RuntimeException("Book not deleted: " + id);

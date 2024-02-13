@@ -17,7 +17,9 @@ public class Book {
     }
 
     public void update(Book bookUpdate) {
-        // TODO: Add check for rented
+        if (rented) {
+            throw new IllegalStateException("Book " + id + " cannot be updated because it's rent.");
+        }
         Optional.ofNullable(bookUpdate.name)
                 .ifPresent(v -> name = v);
         Optional.ofNullable(bookUpdate.author)
@@ -28,9 +30,15 @@ public class Book {
 
     public void rent() {
         if (rented) {
-            throw new IllegalArgumentException("Book " + id + " cannot be rent because it's already rent.");
+            throw new IllegalStateException("Book " + id + " cannot be rent because it's already rent.");
         }
         rented = true;
+    }
+
+    public void delete() {
+        if (rented) {
+            throw new IllegalStateException("Book " + id + " cannot be deleted because it's rent.");
+        }
     }
 
     public Long id() {
