@@ -20,4 +20,8 @@ public class BookService {
     public Book add(Book book) {
         return repository.add(book);
     }
+
+    public Book update(Long id, Book book) {
+        return repository.update(id, book);
+    }
 }

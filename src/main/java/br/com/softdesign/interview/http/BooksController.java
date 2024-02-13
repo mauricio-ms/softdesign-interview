@@ -36,4 +36,19 @@ class BooksController {
         Book newBook = bookService.add(BookMapper.mapToDomain(bookDto));
         return BookMapper.mapToDto(newBook);
     }
+
+    @PutMapping(
+            path = "/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BookDto> updateBook(@PathVariable Long id, @RequestBody BookDto bookDto) {
+        LOGGER.info("PUT /{} {}", id, bookDto);
+        try {
+            Book newBook = bookService.update(id, BookMapper.mapToDomain(bookDto));
+            return ResponseEntity.ok(BookMapper.mapToDto(newBook));
+        } catch (Exception e) {
+            LOGGER.error("Error updating book {}:", id, e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
