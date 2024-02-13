@@ -62,6 +62,21 @@ class BooksController {
         }
     }
 
+    @PatchMapping(
+            path = "/{id}/rent",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BookDto> rent(@PathVariable Long id) {
+        LOGGER.info("PATCH /{}/rent", id);
+        try {
+            bookService.rent(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            LOGGER.error("Error renting book {}:", id, e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @DeleteMapping(
             path = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)

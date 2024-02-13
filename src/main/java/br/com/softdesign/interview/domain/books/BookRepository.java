@@ -18,7 +18,7 @@ class BookRepository {
 
     private static final String FIND_BY_ID_SQL = "SELECT * FROM books WHERE id = ?";
     private static final String ADD_SQL = "INSERT INTO books (name, author, rented) VALUES (?, ?, ?)";
-    private static final String UPDATE_SQL = "UPDATE books SET name = ?, author = ? WHERE id = ?";
+    private static final String UPDATE_SQL = "UPDATE books SET name = ?, author = ?, rented = ? WHERE id = ?";
     private static final String DELETE_SQL = "DELETE books WHERE id = ?";
 
     private static final RowMapper<Book> BOOK_ROW_MAPPER = (rs, rowNum) -> new Book(
@@ -68,13 +68,11 @@ class BookRepository {
     }
 
     public Book update(Long id, Book bookUpdate) {
-        return findById(id)
-                .map(currentBook -> {
-                    currentBook.update(bookUpdate);
-                    jdbcTemplate.update(UPDATE_SQL, currentBook.name(), currentBook.author(), id);
-                    return currentBook;
-                })
+        Book currentBook = findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Book " + id + " not found."));
+        currentBook.update(bookUpdate);
+        jdbcTemplate.update(UPDATE_SQL, currentBook.name(), currentBook.author(), currentBook.rented(), id);
+        return currentBook;
     }
 
     public void delete(Long id) {

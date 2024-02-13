@@ -13,6 +13,13 @@ public class BookService {
         this.repository = repository;
     }
 
+    public void rent(Long id) {
+        Book book = findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Book " + id + " not found."));
+        book.rent();
+        repository.update(id, book);
+    }
+
     public Optional<Book> findById(Long id) {
         return repository.findById(id);
     }

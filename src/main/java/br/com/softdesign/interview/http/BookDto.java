@@ -4,5 +4,5 @@ record BookDto(
         Long id,
         String name,
         String author,
-        boolean rented) {
+        Boolean rented) {
 }

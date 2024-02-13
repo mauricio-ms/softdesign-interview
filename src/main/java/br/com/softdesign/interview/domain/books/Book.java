@@ -7,22 +7,30 @@ public class Book {
     private final Long id;
     private String name;
     private String author;
-    private final boolean rented;
+    private Boolean rented;
 
-    public Book(Long id, String name, String author, boolean rented) {
+    public Book(Long id, String name, String author, Boolean rented) {
         this.id = id;
         this.name = name;
         this.author = author;
         this.rented = rented;
     }
 
-    public Book update(Book bookUpdate) {
+    public void update(Book bookUpdate) {
         // TODO: Add check for rented
         Optional.ofNullable(bookUpdate.name)
                 .ifPresent(v -> name = v);
         Optional.ofNullable(bookUpdate.author)
                 .ifPresent(v -> author = v);
-        return this;
+        Optional.ofNullable(bookUpdate.rented)
+                .ifPresent(v -> rented = v);
+    }
+
+    public void rent() {
+        if (rented) {
+            throw new IllegalArgumentException("Book " + id + " cannot be rent because it's already rent.");
+        }
+        rented = true;
     }
 
     public Long id() {
@@ -38,7 +46,7 @@ public class Book {
     }
 
     public boolean rented() {
-        return rented;
+        return Boolean.TRUE.equals(rented);
     }
 
     @Override
