@@ -5,3 +5,5 @@ CREATE TABLE public.books (
 	   rented BOOLEAN NOT NULL DEFAULT false,
 	   PRIMARY KEY (id)
 	   );
+
+-- IMPORTANT: If using a real database I would define an appropriated index for the search endpoint query
