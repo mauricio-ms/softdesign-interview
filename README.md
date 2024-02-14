@@ -1,6 +1,10 @@
 # Tech Challenge [Soft Design]
 
-This application implements an API REST to:
+The application is divided in two modules: softdesign-interview-backend and softdesign-interview-frontend
+
+## softdesign-interview-backend
+
+This application has an API REST to:
 
 - Create, Edit and Remove Books
 - Rent Books
@@ -13,6 +17,10 @@ There are Unit Tests implemented for the controller and business layers.
 The controller tests ensure that: 
 - Serializaton/deserialization is working properly
 - Business services are being used correctly given correct and incorrect input
+
+## softdesign-interview-frontend
+
+This is an Angular application that communicates with the backend REST API
 
 ## Generating Backend artifact
 
