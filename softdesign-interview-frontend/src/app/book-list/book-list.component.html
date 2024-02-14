@@ -18,8 +18,9 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col" class="col-md-1">#</th>
-                    <th scope="col" class="col-md-4">Name</th>
-                    <th scope="col" class="col-md-4">Author</th>
+                    <th scope="col" class="col-md-3">Name</th>
+                    <th scope="col" class="col-md-3">Author</th>
+                    <th scope="col" class="col-md-1">Rented</th>
                     <th scope="col" class="col-md-2">Actions</th>
                 </tr>
             </thead>
@@ -29,16 +30,34 @@
                     <td>{{ book.name }}</td>
                     <td>{{ book.author }}</td>
                     <td>
+                        <!-- Different Icons based on rented property -->
+                        <ng-container *ngIf="book.rented; else notRented">
+                            <i class="bi bi-check-square-fill text-success"></i>
+                        </ng-container>
+                        <ng-template #notRented>
+                            <i class="bi bi-x-square-fill text-danger"></i>
+                        </ng-template>
+                    </td>
+                    <td>
+                        <!-- Rent Button -->
+                        <button type="button" class="btn btn-primary" (click)="rentBook(book.id)">
+                            Rent
+                        </button>
+
+                        <span>&nbsp;</span>
+
                         <!-- Edit Button -->
                         <button type="button" class="btn btn-primary" (click)="editBook(book.id)">
-                          <i class="bi bi-pencil-square"></i>
+                            <i class="bi bi-pencil-square"></i>
                         </button>
+
+                        <span>&nbsp;</span>
 
                         <!-- Remove Button -->
                         <button type="button" class="btn btn-danger ps-2" (click)="removeBook(book.id)">
-                          <i class="bi bi-trash"></i>
+                            <i class="bi bi-trash"></i>
                         </button>
-                      </td>
+                    </td>
                 </tr>
             </tbody>
         </table>

@@ -34,4 +34,7 @@ export class BookService {
     return this.http.delete<Book>(`${this.booksApiUri}/${id}`);
   }
 
+  public rent(id: bigint) {
+    return this.http.patch<Book>(`${this.booksApiUri}/${id}/rent`, null, { headers : {'Content-Type': 'application/json' }});
+  }
 }

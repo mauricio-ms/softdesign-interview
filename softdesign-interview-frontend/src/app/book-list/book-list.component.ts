@@ -22,7 +22,7 @@ export class BookListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.search(); 
+    this.search();
   }
 
   search() {
@@ -37,6 +37,12 @@ export class BookListComponent implements OnInit {
 
   removeBook(bookId: bigint) {
     this.bookService.delete(bookId).subscribe(() => {
+      this.search();
+    });
+  }
+
+  rentBook(bookId: bigint) {
+    this.bookService.rent(bookId).subscribe(() => {
       this.search();
     });
   }
