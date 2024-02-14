@@ -17,9 +17,10 @@
         <table class="table table-bordered table-striped">
             <thead class="thead-dark">
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Author</th>
+                    <th scope="col" class="col-md-1">#</th>
+                    <th scope="col" class="col-md-4">Name</th>
+                    <th scope="col" class="col-md-4">Author</th>
+                    <th scope="col" class="col-md-2">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,6 +28,17 @@
                     <td>{{ book.id }}</td>
                     <td>{{ book.name }}</td>
                     <td>{{ book.author }}</td>
+                    <td>
+                        <!-- Edit Button -->
+                        <button type="button" class="btn btn-primary" (click)="editBook(book.id)">
+                          <i class="bi bi-pencil-square"></i>
+                        </button>
+
+                        <!-- Remove Button -->
+                        <button type="button" class="btn btn-danger ps-2" (click)="removeBook(book.id)">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </td>
                 </tr>
             </tbody>
         </table>

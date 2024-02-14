@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Book } from '../model/book';
 import { BookService } from '../service/book.service';
@@ -8,7 +8,7 @@ import { BookService } from '../service/book.service';
   templateUrl: './book-form.component.html',
   styleUrl: './book-form.component.css'
 })
-export class BookFormComponent {
+export class BookFormComponent implements OnInit {
 
   book: Book;
 
@@ -17,6 +17,15 @@ export class BookFormComponent {
     private router: Router,
     private bookService: BookService) {
     this.book = new Book();
+  }
+
+  ngOnInit() {
+    const bookIdParam = this.route.snapshot.paramMap.get('id');
+    if (bookIdParam) {
+      this.bookService.getById(BigInt(bookIdParam)).subscribe(
+        b => this.book = b
+      );
+    }
   }
 
   onSubmit() {
