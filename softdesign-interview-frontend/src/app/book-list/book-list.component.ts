@@ -31,19 +31,25 @@ export class BookListComponent implements OnInit {
     });
   }
 
-  editBook(bookId: bigint) {
-    this.router.navigate(['/book', bookId]);
+  editBook(book: Book) {
+    if (book.rented) {
+      alert(`Book ${book.id} cannot be updated because it's rent.`);
+    } else {
+      this.router.navigate(['/book', book.id]);
+    }
   }
 
   removeBook(bookId: bigint) {
-    this.bookService.delete(bookId).subscribe(() => {
-      this.search();
+    this.bookService.delete(bookId).subscribe({
+      next: () => this.search(),
+      error: (e) => alert(e.error.detail)
     });
   }
 
   rentBook(bookId: bigint) {
-    this.bookService.rent(bookId).subscribe(() => {
-      this.search();
+    this.bookService.rent(bookId).subscribe({
+      next: () => this.search(),
+      error: (e) => alert(e.error.detail)
     });
   }
 }

@@ -30,7 +30,10 @@ export class BookFormComponent implements OnInit {
 
   onSubmit() {
     this.bookService.save(this.book)
-      .subscribe(result => this.gotoBookList());
+      .subscribe({
+        next: () => this.gotoBookList(),
+        error: (e) => alert(e.error.detail)
+      });
   }
 
   gotoBookList() {
