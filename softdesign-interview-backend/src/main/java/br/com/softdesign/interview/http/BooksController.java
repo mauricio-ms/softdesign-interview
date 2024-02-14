@@ -98,7 +98,7 @@ class BooksController {
             path = "/{id}/rent",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BookDto> rent(@PathVariable Long id) {
+    public ResponseEntity<BookDto> rentBook(@PathVariable Long id) {
         LOGGER.info("PATCH /{}/rent", id);
         try {
             bookService.rent(id);

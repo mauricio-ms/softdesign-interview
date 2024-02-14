@@ -1,5 +1,6 @@
 package br.com.softdesign.interview.domain.books;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class Book {
@@ -55,6 +56,21 @@ public class Book {
 
     public boolean rented() {
         return Boolean.TRUE.equals(rented);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Book book = (Book) o;
+
+        return Objects.equals(id, book.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override
